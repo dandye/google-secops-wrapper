@@ -1,0 +1,7 @@
+# Changelog
+
+This page tracks the changes made to the Google SecOps SDK for Python.
+
+```{include} ../CHANGELOG.md
+:start-line: 1
+```

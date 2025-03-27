@@ -1,0 +1,70 @@
+# API Reference
+
+This section provides detailed API reference documentation for the Google SecOps SDK for Python.
+
+## SecOpsClient
+
+The `SecOpsClient` is the main entry point for the SDK. It provides access to all Google Security Operations products.
+
+```python
+from secops import SecOpsClient
+
+# Initialize with default credentials
+client = SecOpsClient()
+```
+
+## Chronicle Client
+
+The Chronicle client provides access to all Chronicle/SecOps SIEM features.
+
+```python
+# Initialize Chronicle client
+chronicle = client.chronicle(
+    customer_id="your-chronicle-instance-id",
+    project_id="your-project-id",
+    region="us"
+)
+```
+
+## Module Reference
+
+### Core Modules
+
+- [secops](modules/secops.md) - Main SDK module
+- [secops.chronicle](modules/chronicle.md) - Chronicle client module
+
+### Chronicle Feature Modules
+
+- [secops.chronicle.search](modules/chronicle_search.md) - UDM search functionality
+- [secops.chronicle.ingestion](modules/chronicle_ingestion.md) - Log ingestion functionality
+- [secops.chronicle.iocs](modules/chronicle_iocs.md) - IoCs management functionality
+- [secops.chronicle.alerts](modules/chronicle_alerts.md) - Alert management functionality
+- [secops.chronicle.cases](modules/chronicle_cases.md) - Case management functionality
+- [secops.chronicle.rules](modules/chronicle_rules.md) - Detection rules functionality
+- [secops.chronicle.entity](modules/chronicle_entity.md) - Entity graph functionality
+- [secops.chronicle.retrohunts](modules/chronicle_retrohunts.md) - Retrohunts functionality
+
+### Utility Modules
+
+- [secops.auth](modules/auth.md) - Authentication utilities
+- [secops.utils](modules/utils.md) - General utilities
+- [secops.exceptions](modules/exceptions.md) - Exception classes
+
+```{toctree}
+:maxdepth: 2
+:hidden:
+
+modules/secops
+modules/chronicle
+modules/chronicle_search
+modules/chronicle_ingestion
+modules/chronicle_iocs
+modules/chronicle_alerts
+modules/chronicle_cases
+modules/chronicle_rules
+modules/chronicle_entity
+modules/chronicle_retrohunts
+modules/auth
+modules/utils
+modules/exceptions
+```
