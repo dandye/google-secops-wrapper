@@ -1,4 +1,4 @@
-# Duck Punching an SDK to Quack like an MCP Server
+# Duck Punch an SDK until it Quacks like an MCP Server
 
 In the rapidly evolving world of AI agents, the **Model Context Protocol (MCP)** has emerged as a standard for connecting LLMs to external tools and data. But here's a common dilemma: you have a perfectly good Python SDK for your internal API, but it's built for *humans*, not *LLMs*.
 
