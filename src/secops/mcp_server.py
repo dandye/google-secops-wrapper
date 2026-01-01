@@ -5,6 +5,7 @@ import inspect
 import functools
 import pkgutil
 import sys
+import json
 
 from mcp.server.fastmcp import FastMCP
 from secops.chronicle.client import ChronicleClient
@@ -79,8 +80,33 @@ def discover_tools():
                 continue
     return tools
 
+def load_overrides():
+    """Load documentation overrides from mcp_docs/overrides.json"""
+    overrides = {}
+    try:
+        # Assuming mcp_docs is in the current working directory or relative to project root
+        # We look for it in the current working directory first
+        docs_dir = os.path.join(os.getcwd(), "mcp_docs")
+        overrides_file = os.path.join(docs_dir, "overrides.json")
+
+        if os.path.exists(overrides_file):
+            with open(overrides_file, 'r') as f:
+                mapping = json.load(f)
+
+            for func_path, md_file in mapping.items():
+                md_path = os.path.join(docs_dir, md_file)
+                if os.path.exists(md_path):
+                    with open(md_path, 'r') as f:
+                        overrides[func_path] = f.read()
+    except Exception as e:
+        print(f"Warning: Failed to load overrides: {e}")
+
+    return overrides
+
 def register_tools():
     tools = discover_tools()
+    overrides = load_overrides()
+
     for module_name, func_name, func in tools:
         try:
             # Wrapper to inject client
@@ -104,6 +130,11 @@ def register_tools():
             wrapper = create_wrapper(func)
 
             wrapper.__signature__ = new_sig
+
+            # Apply documentation override if available
+            full_name = f"{module_name}.{func_name}"
+            if full_name in overrides:
+                wrapper.__doc__ = overrides[full_name]
 
             mcp.add_tool(wrapper)
 
