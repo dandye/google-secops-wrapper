@@ -17,7 +17,7 @@
 from datetime import datetime
 from typing import Any
 
-from secops.chronicle.models import Case, CaseList
+from secops.chronicle.models import APIVersion, Case, CaseList
 from secops.exceptions import APIError
 
 
@@ -132,3 +132,53 @@ def get_cases_from_list(client, case_ids: list[str]) -> CaseList:
             cases.append(case)
 
     return CaseList(cases)
+
+
+def list_cases(
+    client,
+    page_size: int | None = None,
+    page_token: str | None = None,
+    filter_query: str | None = None,
+    order_by: str | None = None,
+    api_version: APIVersion | None = APIVersion.V1ALPHA,
+) -> dict[str, Any]:
+    """List cases from Chronicle.
+
+    Args:
+        client: ChronicleClient instance
+        page_size: Maximum number of cases to return per page
+        page_token: Token for pagination
+        filter_query: Filter string to restrict results
+        order_by: Field to order results by
+        api_version: Preferred API version to use (defaults to v1alpha)
+
+    Returns:
+        Dictionary containing cases list and next page token
+
+    Raises:
+        APIError: If the API request fails
+    """
+    url = (
+        f"{client.base_url(api_version, list(APIVersion))}/"
+        f"{client.instance_id}/cases"
+    )
+
+    params = {}
+    if page_size:
+        params["pageSize"] = str(page_size)
+    if page_token:
+        params["pageToken"] = page_token
+    if filter_query:
+        params["filter"] = filter_query
+    if order_by:
+        params["orderBy"] = order_by
+
+    response = client.session.get(url, params=params)
+
+    if response.status_code != 200:
+        raise APIError(f"Failed to list cases: {response.text}")
+
+    try:
+        return response.json()
+    except ValueError as e:
+        raise APIError(f"Failed to parse cases response: {str(e)}") from e

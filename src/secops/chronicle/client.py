@@ -25,7 +25,7 @@ from google.auth.transport import requests as google_auth_requests
 from secops import auth as secops_auth
 from secops.auth import RetryConfig
 from secops.chronicle.alert import get_alerts as _get_alerts
-from secops.chronicle.case import get_cases_from_list
+from secops.chronicle.case import get_cases_from_list, list_cases as _list_cases
 from secops.chronicle.dashboard import DashboardAccessType, DashboardView
 from secops.chronicle.dashboard import add_chart as _add_chart
 from secops.chronicle.dashboard import create_dashboard as _create_dashboard
@@ -803,6 +803,38 @@ class ChronicleClient:
             max_events,
             case_insensitive,
             max_attempts,
+        )
+
+    def list_cases(
+        self,
+        page_size: int | None = None,
+        page_token: str | None = None,
+        filter_query: str | None = None,
+        order_by: str | None = None,
+        api_version: APIVersion | None = APIVersion.V1ALPHA,
+    ) -> dict[str, Any]:
+        """List cases from Chronicle.
+
+        Args:
+            page_size: Maximum number of cases to return per page
+            page_token: Token for pagination
+            filter_query: Filter string to restrict results
+            order_by: Field to order results by
+            api_version: Preferred API version to use (defaults to v1alpha)
+
+        Returns:
+            Dictionary containing cases list and next page token
+
+        Raises:
+            APIError: If the API request fails
+        """
+        return _list_cases(
+            self,
+            page_size=page_size,
+            page_token=page_token,
+            filter_query=filter_query,
+            order_by=order_by,
+            api_version=api_version,
         )
 
     def _process_stats_results(self, results: dict[str, Any]) -> dict[str, Any]:

@@ -15,7 +15,7 @@
 """Chronicle API specific functionality."""
 
 from secops.chronicle.alert import get_alerts
-from secops.chronicle.case import get_cases
+from secops.chronicle.case import get_cases, list_cases
 from secops.chronicle.client import (
     ChronicleClient,
     ValueType,
@@ -226,6 +226,7 @@ __all__ = [
     "trigger_investigation",
     # Case
     "get_cases",
+    "list_cases",
     # Alert
     "get_alerts",
     # Log Ingestion
